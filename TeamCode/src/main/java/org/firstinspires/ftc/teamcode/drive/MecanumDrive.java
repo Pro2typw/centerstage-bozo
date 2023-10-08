@@ -158,28 +158,27 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightFront.setPower(rf);
     }
 
-    public void setPowersByGamepadFieldCentric(double x, double y, double rx) {
+    public void setPowersByGamepadFieldCentric(double x, double y, double rx, PowerMultiplier<Double, Double> func) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
         double botHeading = angles.firstAngle;
 
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-        rotX = rotX * 1.1;
+
 //        TODO: Counteract imperfect strafing
+        rotX = rotX * 1.1;
+        rotY = rotY * 1.1;
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = (rotY + rotX + rx) / denominator;
-        double backLeftPower = (rotY - rotX + rx) / denominator;
-        double frontRightPower = (rotY - rotX - rx) / denominator;
-        double backRightPower = (rotY + rotX - rx) / denominator;
+        double frontLeftPower = func.applyMultiplier((rotY + rotX + rx) / denominator);
+        double backLeftPower = func.applyMultiplier((rotY - rotX + rx) / denominator);
+        double frontRightPower = func.applyMultiplier((rotY - rotX - rx) / denominator);
+        double backRightPower = func.applyMultiplier((rotY + rotX - rx) / denominator);
 
         leftFront.setPower(frontLeftPower);
         leftRear.setPower(backLeftPower);
         rightRear.setPower(frontRightPower);
         rightFront.setPower(backRightPower);
-
-
-
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
