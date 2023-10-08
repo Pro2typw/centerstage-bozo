@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.vision.test;
+package org.firstinspires.ftc.teamcode.vision.pipelines;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -13,9 +12,9 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EOCVTest extends OpenCvPipeline {
-    public int tolerance = 50;
-    private final Scalar selectedValue = new Scalar(231, 130, 125);
+public class GreenPixelPipeline extends OpenCvPipeline {
+    public int tolerance = 30;
+    private final Scalar selectedValue = new Scalar(124, 97, 95);
     private double[] values = selectedValue.val;
     private Scalar lower = new Scalar(values[0] - tolerance < 0? 0: values[0] - tolerance,values[1] - tolerance < 0? 0: values[1] - tolerance, values[2] - tolerance < 0? 0: values[2] - tolerance);
     private Scalar upper = new Scalar(values[0] + tolerance > 255? 255: values[0] + tolerance,values[1] + tolerance > 255? 255: values[1] + tolerance, values[2] + tolerance > 255? 255: values[2] + tolerance);
@@ -27,7 +26,7 @@ public class EOCVTest extends OpenCvPipeline {
     Telemetry telemetry;
     double error;
 
-    public EOCVTest(Telemetry telemetry) {
+    public GreenPixelPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
         error = 0;
     }
@@ -36,6 +35,7 @@ public class EOCVTest extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         Imgproc.cvtColor(input, cvtMat, Imgproc.COLOR_RGB2YCrCb);
         Core.inRange(cvtMat, lower, upper, binaryMat);
+
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(binaryMat, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
         Imgproc.drawContours(binaryMat, contours, -1, new Scalar(255,0,0));
@@ -49,20 +49,19 @@ public class EOCVTest extends OpenCvPipeline {
             }
         }
 
-//        assert biggestContour != null;
         if(biggestContour != null) {
             Rect rect = Imgproc.boundingRect(biggestContour);
 
             resultMat.release();
 
             Core.bitwise_and(input, input, resultMat, binaryMat);
-            Imgproc.rectangle(resultMat, rect, new Scalar(255,0,0));
+            Imgproc.rectangle(input, rect, new Scalar(255,0,0));
 
             error = (rect.x + (rect.width / 2)) - (input.width() / 2);
             telemetry.addData("Error", error);
             telemetry.update();
 
-            return resultMat;
+            return input;
         }
         return input;
     }
