@@ -56,6 +56,12 @@ import java.util.List;
 
 @Config
 public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
+    public static enum ToggleRobotCentric {
+        ROBOT_CENTRIC,
+        FIELD_CENTRIC
+    }
+
+    ToggleRobotCentric drivetrainCentric;
 
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(6, 0.01, 0.01);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(4, 0, 0);
@@ -135,6 +141,16 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 //        TODO: Check Control Hub and fix it
 //        new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)
 
+        drivetrainCentric = ToggleRobotCentric.ROBOT_CENTRIC;
+    }
+
+    public void setToggleMotorPowers(double x, double y, double rx, PowerMultiplier<Double, Double> func) {
+        if (drivetrainCentric == ToggleRobotCentric.ROBOT_CENTRIC) {
+            setPowersByGamepadRobotCentric(x, y, rx, func);
+        }
+        else {
+            setPowersByGamepadFieldCentric(x, y, rx, func);
+        }
     }
 
     @Override
@@ -180,6 +196,11 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightRear.setPower(frontRightPower);
         rightFront.setPower(backRightPower);
     }
+
+    public void toggleDrivetrainCentric() {
+        this.drivetrainCentric = drivetrainCentric == ToggleRobotCentric.ROBOT_CENTRIC ? ToggleRobotCentric.FIELD_CENTRIC : ToggleRobotCentric.ROBOT_CENTRIC;
+    }
+
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
