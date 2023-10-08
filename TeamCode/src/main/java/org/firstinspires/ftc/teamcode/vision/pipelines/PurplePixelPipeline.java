@@ -48,20 +48,19 @@ public class PurplePixelPipeline extends OpenCvPipeline {
             }
         }
 
-//        assert biggestContour != null;
         if(biggestContour != null) {
             Rect rect = Imgproc.boundingRect(biggestContour);
 
             resultMat.release();
 
             Core.bitwise_and(input, input, resultMat, binaryMat);
-            Imgproc.rectangle(resultMat, rect, new Scalar(255,0,0));
+            Imgproc.rectangle(input, rect, new Scalar(255,0,0));
 
-        error = (rect.x + (rect.width / 2)) - (input.width() / 2);
-        telemetry.addData("Error", error);
-        telemetry.update();
+            error = (rect.x + (rect.width / 2)) - (input.width() / 2);
+            telemetry.addData("Error", error);
+            telemetry.update();
 
-            return resultMat;
+            return input;
         }
         return input;
     }
