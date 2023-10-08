@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
 public class TeleOp extends LinearOpMode {
+    public enum CentricToggle {
+
+    }
     MecanumDrive mecanumDrive;
 
     @Override
@@ -14,11 +17,16 @@ public class TeleOp extends LinearOpMode {
 
         while(opModeInInit()) {
 
+
         }
 
         waitForStart();
 
         while (opModeIsActive()) {
+
+            mecanumDrive.setPowersByGamepadRobotCentric(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, (Double x) -> {
+                return Math.pow(x, 3);
+            });
 
         }
 

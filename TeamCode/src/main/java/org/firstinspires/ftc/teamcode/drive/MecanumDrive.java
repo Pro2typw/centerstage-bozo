@@ -30,14 +30,20 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.drive.util.PowerMultiplier;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
@@ -120,6 +126,60 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         }
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+
+        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+//        TODO: Check Control Hub and fix it
+//        new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)
+
+    }
+
+    @Override
+    public void setMotorPowers(double v, double v1, double v2, double v3) {
+        leftFront.setPower(v);
+        leftRear.setPower(v1);
+        rightRear.setPower(v2);
+        rightFront.setPower(v3);
+    }
+
+    public void setPowersByGamepadRobotCentric(double x, double y, double rx, PowerMultiplier<Double, Double> func) {
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double lf = func.applyMultiplier((y + x + rx) / denominator);
+        double lb = func.applyMultiplier((y - x + rx) / denominator);
+        double rb = func.applyMultiplier((y + x - rx) / denominator);
+        double rf = func.applyMultiplier((y - x - rx) / denominator);
+
+        leftFront.setPower(lf);
+        leftRear.setPower(lb);
+        rightRear.setPower(rb);
+        rightFront.setPower(rf);
+    }
+
+    public void setPowersByGamepadFieldCentric(double x, double y, double rx) {
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
+        double botHeading = angles.firstAngle;
+
+        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+        rotX = rotX * 1.1;
+//        TODO: Counteract imperfect strafing
+
+        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+        double frontLeftPower = (rotY + rotX + rx) / denominator;
+        double backLeftPower = (rotY - rotX + rx) / denominator;
+        double frontRightPower = (rotY - rotX - rx) / denominator;
+        double backRightPower = (rotY + rotX - rx) / denominator;
+
+        leftFront.setPower(frontLeftPower);
+        leftRear.setPower(backLeftPower);
+        rightRear.setPower(frontRightPower);
+        rightFront.setPower(backRightPower);
+
+
+
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -256,26 +316,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         return wheelVelocities;
     }
 
-    @Override
-    public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
-    }
 
-    public void setPowersByGamepad(double x, double y, double rx, PowerMultiplier<Double, Double> func) {
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double lf = func.applyMultiplier((y + x + rx) / denominator);
-        double lb = func.applyMultiplier((y - x + rx) / denominator);
-        double rb = func.applyMultiplier((y + x - rx) / denominator);
-        double rf = func.applyMultiplier((y - x - rx) / denominator);
-
-        leftFront.setPower(lf);
-        leftRear.setPower(lb);
-        rightRear.setPower(rb);
-        rightFront.setPower(rf);
-    }
 
     @Override
     public double getRawExternalHeading() {
