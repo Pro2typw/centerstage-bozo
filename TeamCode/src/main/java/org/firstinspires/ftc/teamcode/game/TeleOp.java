@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Hang;
 
 public class TeleOp extends LinearOpMode {
+
     MecanumDrive mecanumDrive;
     Hang hang = new Hang(hardwareMap);
     @Override
@@ -15,11 +16,17 @@ public class TeleOp extends LinearOpMode {
 
         while(opModeInInit()) {
 
+
         }
 
         waitForStart();
 
         while (opModeIsActive()) {
+
+            if(gamepad2.a) mecanumDrive.toggleDrivetrainCentric();
+            mecanumDrive.setToggleMotorPowers(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, (Double x) -> {
+                return Math.pow(x, 3);
+            });
 
             if(gamepad1.a)
                 hang.stateHang(Hang.StateHang.EXTEND);
