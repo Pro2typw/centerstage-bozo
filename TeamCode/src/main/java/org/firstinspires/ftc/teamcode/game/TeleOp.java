@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
 public class TeleOp extends LinearOpMode {
-
     MecanumDrive mecanumDrive;
 
     @Override
