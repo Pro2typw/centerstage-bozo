@@ -31,6 +31,7 @@ public class Hang {
         leftHang.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightHang.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
+
         leftHang.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightHang.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
