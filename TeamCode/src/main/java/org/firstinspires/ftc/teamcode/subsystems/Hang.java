@@ -12,9 +12,9 @@ public class Hang {
         RETRACT,
         STOP
     }
+
     private DcMotor leftHang;
     private DcMotor rightHang;
-
     private Servo leftScissor;
     private Servo rightScissor;
     private StateHang state;
@@ -31,16 +31,11 @@ public class Hang {
         leftHang.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightHang.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-
         leftHang.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightHang.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         state = StateHang.START;
     }
-
-
-
-
 
     public void stateHang(StateHang state) {
 
@@ -63,9 +58,5 @@ public class Hang {
                 rightScissor.setPosition(.1); // TODO: find servo pos
                 break;
         }
-
     }
-
-
-
 }
