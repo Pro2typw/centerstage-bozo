@@ -38,10 +38,6 @@ public class Hang {
         state = StateHang.START;
     }
 
-
-
-
-
     public void stateHang(StateHang state) {
 
         if(this.state == state)

@@ -24,6 +24,14 @@ public class PTO {
         motorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
+    public void setIntakePower(double speed) {
+        motorOne.setPower(speed);
+        motorTwo.setPower(-speed);
+    }
+
+    public void setState() {
+
+    }
     public void intakeFast(){
         double speed = .6;
         motorOne.setPower(speed);
