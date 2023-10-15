@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
-
-import java.util.List;
 
 public class Robot {
     MecanumDrive drive;
     PTO pto;
     Hang hang;
-    AirplaneLauncher launcher;
+    Launcher launcher;
 
     public static enum ToggleRobotCentric {
         ROBOT_CENTRIC,
@@ -24,7 +21,7 @@ public class Robot {
         drive = new MecanumDrive(hardwareMap);
         pto = new PTO(hardwareMap);
         hang = new Hang(hardwareMap);
-        launcher = new AirplaneLauncher(hardwareMap);
+        launcher = new Launcher(hardwareMap);
 
         drivetrainCentric = ToggleRobotCentric.ROBOT_CENTRIC;
     }

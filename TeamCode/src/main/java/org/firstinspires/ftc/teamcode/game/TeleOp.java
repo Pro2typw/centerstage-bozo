@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.game;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.sun.tools.javac.jvm.Code;
 
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.AirplaneLauncher;
+import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.subsystems.Hang;
 
 
@@ -12,7 +11,7 @@ public class TeleOp extends LinearOpMode {
 
     MecanumDrive mecanumDrive;
     Hang hang = new Hang(hardwareMap);
-    AirplaneLauncher launcher = new AirplaneLauncher(hardwareMap);
+    Launcher launcher = new Launcher(hardwareMap);
     @Override
     public void runOpMode() throws InterruptedException {
 
