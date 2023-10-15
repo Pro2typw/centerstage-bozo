@@ -9,7 +9,7 @@ public class AirplaneLauncher {
 
     public AirplaneLauncher(HardwareMap hardwareMap)
     {
-        servo = hardwareMap.get(Servo.class, "servo");
+        servo = hardwareMap.get(Servo.class, "servo"); // TODO: Servo device name
     }
 
     public void launch()
