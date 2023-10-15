@@ -17,7 +17,7 @@ public class Turret {
     private BNO055IMU imu;
     Orientation angles;
     Servo turretServo;
-    public static final double TURRET_HOME = 0.0;
+    public static final double TURRET_HOME = 0.5;
     public static final double TURRET_MIN_RANGE = 0.0; // TODO: Set smallest valye allowed for servo pos
     public static final double TURRET_MAX_RANGE = 1.0; // TODO: Set largest valye allowed for servo pos
 
@@ -39,16 +39,17 @@ public class Turret {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double currentHeading = angles.firstAngle; // Z axis is the one that changes apparently (pointing at you/up)
 
-        double minHeading = 175.0; // TODO: Minimum heading for facing the backboard
-        double maxHeading = 185.0; // TODO: Maximum heading for facing the backboard
+        double servoPosition = (currentHeading)/300.0;
 
-
-
-        if (currentHeading >= minHeading && currentHeading <= maxHeading) {
-            turretServo.setPosition(TURRET_MAX_RANGE);
+        if (currentHeading >= TURRET_MIN_RANGE && currentHeading <= TURRET_MAX_RANGE) {
+            turretServo.setPosition(servoPosition);
         } else {
             turretServo.setPosition(TURRET_HOME);
         }
+    }
+    public void resetIMU(){
+        // TODO: Make a method that resets the imu position when drivers press a button
+        // imu
     }
 }
     //turret automatically faces backboard if between some range of angles (not when facing intake side or something)
