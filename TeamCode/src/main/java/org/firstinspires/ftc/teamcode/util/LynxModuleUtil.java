@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import androidx.annotation.Nullable;
+
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 
@@ -120,5 +123,15 @@ public class LynxModuleUtil {
             }
             throw new LynxFirmwareVersionException(msgBuilder.toString());
         }
+    }
+
+    @Nullable
+    public static LynxModule getControlHub(HardwareMap hardwareMap) {
+        for (LynxModule lynxModule : hardwareMap.getAll(LynxModule.class)) {
+            if (LynxConstants.isEmbeddedSerialNumber(lynxModule.getSerialNumber())) {
+                return lynxModule;
+            }
+        }
+        return null;
     }
 }

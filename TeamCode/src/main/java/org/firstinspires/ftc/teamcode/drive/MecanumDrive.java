@@ -44,7 +44,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.drive.util.PowerMultiplier;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
@@ -53,6 +52,7 @@ import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 @Config
 public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
@@ -144,7 +144,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         drivetrainCentric = ToggleRobotCentric.ROBOT_CENTRIC;
     }
 
-    public void setToggleMotorPowers(double x, double y, double rx, PowerMultiplier<Double, Double> func) {
+    public void setToggleMotorPowers(double x, double y, double rx, Function<Double, Double> func) {
         if (drivetrainCentric == ToggleRobotCentric.ROBOT_CENTRIC) {
             setPowersByGamepadRobotCentric(x, y, rx, func);
         }
@@ -161,12 +161,12 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightFront.setPower(v3);
     }
 
-    public void setPowersByGamepadRobotCentric(double x, double y, double rx, PowerMultiplier<Double, Double> func) {
+    public void setPowersByGamepadRobotCentric(double x, double y, double rx, Function<Double, Double> func) {
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double lf = func.applyMultiplier((y + x + rx) / denominator);
-        double lb = func.applyMultiplier((y - x + rx) / denominator);
-        double rb = func.applyMultiplier((y + x - rx) / denominator);
-        double rf = func.applyMultiplier((y - x - rx) / denominator);
+        double lf = func.apply((y + x + rx) / denominator);
+        double lb = func.apply((y - x + rx) / denominator);
+        double rb = func.apply((y + x - rx) / denominator);
+        double rf = func.apply((y - x - rx) / denominator);
 
         leftFront.setPower(lf);
         leftRear.setPower(lb);
@@ -174,7 +174,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightFront.setPower(rf);
     }
 
-    public void setPowersByGamepadFieldCentric(double x, double y, double rx, PowerMultiplier<Double, Double> func) {
+    public void setPowersByGamepadFieldCentric(double x, double y, double rx, Function<Double, Double> func) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
         double botHeading = angles.firstAngle;
 
@@ -186,10 +186,10 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rotY = rotY * 1.1;
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = func.applyMultiplier((rotY + rotX + rx) / denominator);
-        double backLeftPower = func.applyMultiplier((rotY - rotX + rx) / denominator);
-        double frontRightPower = func.applyMultiplier((rotY - rotX - rx) / denominator);
-        double backRightPower = func.applyMultiplier((rotY + rotX - rx) / denominator);
+        double frontLeftPower = func.apply((rotY + rotX + rx) / denominator);
+        double backLeftPower = func.apply((rotY - rotX + rx) / denominator);
+        double frontRightPower = func.apply((rotY - rotX - rx) / denominator);
+        double backRightPower = func.apply((rotY + rotX - rx) / denominator);
 
         leftFront.setPower(frontLeftPower);
         leftRear.setPower(backLeftPower);
