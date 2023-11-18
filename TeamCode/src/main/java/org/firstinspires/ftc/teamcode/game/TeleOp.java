@@ -83,6 +83,11 @@ public class TeleOp extends LinearOpMode {
             // Turret
 
 
+            //Launcher:
+
+
+
+            /*
             HtmlFormatter currentFormatting = new HtmlFormatter().bold().textColor("red");
             telemetry.addData("Pose estimate", mecanumDrive.getPoseEstimate().toString());
             telemetry.addData("Current draw summed (amps)", currentFormatting.format(getCurrent(hardwareMap)));
@@ -91,6 +96,10 @@ public class TeleOp extends LinearOpMode {
             } catch (NullPointerException ignored) {}
             telemetry.addData("Loop Time (us)", loopRateTracker.update().getLoopTime());
             telemetry.update();
+            */
+
+
+
         }
     }
 

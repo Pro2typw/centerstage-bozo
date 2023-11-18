@@ -23,7 +23,7 @@ public class VisionTestOpMode extends LinearOpMode {
                 .setCamera(webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .setCameraResolution(new Size(640, 480))  // you can go up to 720 x 960
                 .setCamera(BuiltinCameraDirection.BACK)
-                .addProcessor(visionTest    )
+                .addProcessor(visionTest)
                 .build();
 
         waitForStart();
