@@ -24,7 +24,6 @@ android {
 }
 
 dependencies {
-    implementation files('C:\\Users\\cd12069380\\Documents\\Pro2Type-Centerstage\\libs\\Vuforia.jar')
 }
 
 apply from: '../build.dependencies.gradle'
