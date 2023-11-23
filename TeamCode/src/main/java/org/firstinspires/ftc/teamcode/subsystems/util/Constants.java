@@ -11,9 +11,7 @@ public class Constants {
 
     }
 
-    public class PTOConstants {
 
-    }
 
     public class TurretConstants {
         public static final double TURRET_HOME = 0.5; // TODO

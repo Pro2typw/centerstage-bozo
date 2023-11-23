@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.game;
 
-import static org.firstinspires.ftc.teamcode.game.test.HardwareTest.servoCurrent;
+import static org.firstinspires.ftc.teamcode.test.HardwareTest.servoCurrent;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -39,9 +39,7 @@ public class TeleOp extends LinearOpMode {
         JustPressed justPressed2 = new JustPressed(gamepad2);
         LoopRateTracker loopRateTracker = new LoopRateTracker(TimeUnit.MICROSECONDS);
 
-        while (opModeInInit()) {
-            sleep(200);
-        }
+        while (opModeInInit()) sleep(200);
 
         waitForStart();
         loopRateTracker.update();
@@ -62,17 +60,12 @@ public class TeleOp extends LinearOpMode {
 //                return Math.pow(x, 3);
 //            });
 
-            if (justPressed2.a())
-                hang.stateHang(Hang.StateHang.EXTEND);
-            if (justPressed2.b())
-                hang.stateHang(Hang.StateHang.RETRACT);
+            if (justPressed2.a()) hang.stateHang(Hang.StateHang.EXTEND);
+            if (justPressed2.b()) hang.stateHang(Hang.StateHang.RETRACT);
 
             // Drone
-            if (justPressed1.y())
-                launcher.launch();
-
-            else
-                launcher.stop();
+            if (justPressed1.y()) launcher.launch();
+            else launcher.stop();
 
             //Code for Turret:
 
