@@ -5,10 +5,13 @@ public class Constants {
 
     }
 
-    public class LauncherConstants {
-        public static final double LAUNCHER_LAUNCH_POSITION = 0.9; // TODO
-        public static final double LAUNCHER_STOP_POSITION = 0.0; // TODO
+    public class Slides {
+        public static final double MAX_HEIGHT_POSITION = 0; //TODO
+        public static final double MIN_HEIGHT_POSITION = 0; //TODO
+    }
 
+    public class Launcher {
+        public static final double LAUNCHER_LAUNCH_POWER = 1; // TODO: 1 should be fine :/
     }
 
 

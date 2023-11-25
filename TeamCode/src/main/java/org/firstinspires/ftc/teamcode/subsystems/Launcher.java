@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -7,20 +10,19 @@ import org.firstinspires.ftc.teamcode.subsystems.util.Constants;
 
 public class Launcher {
 
-    public Servo servo;
+    public CRServo servo;
 
-    public Launcher(HardwareMap hardwareMap)
-    {
-        servo = hardwareMap.get(Servo.class, "servo");
+    public Launcher(@NonNull HardwareMap hardwareMap) {
+        servo = hardwareMap.get(CRServo.class, "servo");
     }
 
     public void launch()
     {
-        servo.setPosition(Constants.LauncherConstants.LAUNCHER_LAUNCH_POSITION);
+        servo.setPower(Constants.Launcher.LAUNCHER_LAUNCH_POWER);
     }
 
     public void stop()
     {
-        servo.setPosition(Constants.LauncherConstants.LAUNCHER_STOP_POSITION);
+        servo.setPower(0);
     }
 }

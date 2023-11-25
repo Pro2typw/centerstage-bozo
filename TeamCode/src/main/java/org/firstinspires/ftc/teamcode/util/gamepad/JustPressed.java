@@ -13,9 +13,11 @@ import java.util.Set;
 public class JustPressed {
 
     public GamepadListenerEx listener;
+    public Gamepad gamepad;
     public Set<GamepadListener.Button> justPressed;
 
     public JustPressed(Gamepad gamepad) {
+        this.gamepad = gamepad;
         this.listener = new GamepadListenerEx(gamepad) {
             @Override
             public void onButtonPress(Button button) {
@@ -24,11 +26,6 @@ public class JustPressed {
             }
         };
         update();
-    }
-
-    public JustPressed(GamepadListenerEx gamepadListener) {
-        this.listener = gamepadListener;
-        // todo doesnt work
     }
 
     public void update() {
@@ -77,5 +74,14 @@ public class JustPressed {
     }
     public boolean guide() {
         return justPressed.contains(GamepadListener.Button.guide);
+    }
+    public double left_stick_x() {
+        return gamepad.left_stick_x;
+    }public double left_stick_y() {
+        return gamepad.left_stick_y;
+    }public double right_stick_x() {
+        return gamepad.right_stick_x;
+    }public double right_stick_y() {
+        return gamepad.right_stick_y;
     }
 }
