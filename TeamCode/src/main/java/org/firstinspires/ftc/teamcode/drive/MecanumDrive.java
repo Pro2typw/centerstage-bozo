@@ -95,10 +95,10 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "flMec");
-        leftRear = hardwareMap.get(DcMotorEx.class, "blMec");
-        rightRear = hardwareMap.get(DcMotorEx.class, "brMec");
-        rightFront = hardwareMap.get(DcMotorEx.class, "frMec");
+        leftFront = hardwareMap.get(DcMotorEx.class, "fl");
+        leftRear = hardwareMap.get(DcMotorEx.class, "bl");
+        rightRear = hardwareMap.get(DcMotorEx.class, "br");
+        rightFront = hardwareMap.get(DcMotorEx.class, "fr");
 
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

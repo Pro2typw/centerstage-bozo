@@ -77,11 +77,14 @@ public class JustPressed {
     }
     public double left_stick_x() {
         return gamepad.left_stick_x;
-    }public double left_stick_y() {
+    }
+    public double left_stick_y() {
         return gamepad.left_stick_y;
-    }public double right_stick_x() {
+    }
+    public double right_stick_x() {
         return gamepad.right_stick_x;
-    }public double right_stick_y() {
+    }
+    public double right_stick_y() {
         return gamepad.right_stick_y;
     }
 }

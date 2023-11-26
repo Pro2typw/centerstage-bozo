@@ -6,8 +6,12 @@ public class Constants {
     }
 
     public class Slides {
-        public static final double MAX_HEIGHT_POSITION = 0; //TODO
-        public static final double MIN_HEIGHT_POSITION = 0; //TODO
+        public static final int MAX_HEIGHT_POSITION = 4100; //safety
+        public static final int MIN_HEIGHT_POSITION = 0;
+        public static final double MAX_POWER = .7; // TODO: too fast?
+        public static final double SLIDE_MAJOR_INCREMENTS_TICKS = 1000; // TODO: adjust with test (i think it is too much) (maybe like 500???)
+        public static final double SLIDE_MINOR_INCREMENTS_TICKS = 100; // TODO: adjust with test (i think it is too much) (maybe like 500???)
+
     }
 
     public class Launcher {
