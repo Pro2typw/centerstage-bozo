@@ -13,16 +13,14 @@ public class Launcher {
     public CRServo servo;
 
     public Launcher(@NonNull HardwareMap hardwareMap) {
-        servo = hardwareMap.get(CRServo.class, "servo");
+        servo = hardwareMap.get(CRServo.class, Constants.Launcher.LAUNCHER_MAP_NAME);
     }
 
-    public void launch()
-    {
+    public void launch() {
         servo.setPower(Constants.Launcher.LAUNCHER_LAUNCH_POWER);
     }
 
-    public void stop()
-    {
+    public void stop() {
         servo.setPower(0);
     }
 }

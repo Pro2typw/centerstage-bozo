@@ -11,7 +11,7 @@ public class Slides {
     private MultiMotor slides;
     private int position;
     public Slides(HardwareMap hardwareMap) {
-        slides = new MultiMotor(hardwareMap, "slide1", "slide2");
+        slides = new MultiMotor(hardwareMap, Constants.Slides.LEFT_SLIDE_MAP_NAME, Constants.Slides.RIGHT_SLIDE_MAP_NAME);
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slides.setDirection(DcMotorSimple.Direction.REVERSE);
 
