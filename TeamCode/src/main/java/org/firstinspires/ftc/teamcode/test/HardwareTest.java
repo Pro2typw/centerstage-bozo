@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Config
-@TeleOp(group = "test", name = "Hardware Test")
+@TeleOp(group = "Test", name = "Hardware Test")
 public class HardwareTest extends LinearOpMode {
     public static boolean CONTROL_HUB_SELECTED = true;
     public static double MOTOR0_POWER = 0;
