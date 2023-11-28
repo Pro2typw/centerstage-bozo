@@ -41,8 +41,6 @@ public class Constants {
         public static final double LAUNCHER_LAUNCH_POWER = 1; // TODO: 1 should be fine :/
     }
 
-
-
     public class TurretConstants {
         public static final double TURRET_HOME = 0.5; // TODO
         public static final double TURRET_MIN_RANGE = 0.0; // TODO: Set smallest valye allowed for servo pos
