@@ -9,13 +9,14 @@ import org.firstinspires.ftc.teamcode.subsystems.util.MultiMotor;
 
 public class Slides {
     private MultiMotor slides;
-    private int position;
+    private int position, previousPosition;
     public Slides(HardwareMap hardwareMap) {
         slides = new MultiMotor(hardwareMap, Constants.Slides.LEFT_SLIDE_MAP_NAME, Constants.Slides.RIGHT_SLIDE_MAP_NAME);
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slides.setDirection(DcMotorSimple.Direction.REVERSE);
 
         position = 0;
+        previousPosition = 0;
     }
 
     public void setPower(double power) {
@@ -26,9 +27,10 @@ public class Slides {
         slides.setMode(mode);
     }
 
-    public void toTargetPosition(int position, double power) {
+    public void setTargetPosition(int position, double power) {
+        previousPosition = getPosition();
         slides.setTargetPosition(position);
-        slides.setPower(power);
+        setPower(power);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
@@ -45,7 +47,16 @@ public class Slides {
         if(position < Constants.Slides.MIN_HEIGHT_POSITION) position = Constants.Slides.MIN_HEIGHT_POSITION;
         if(position > Constants.Slides.MAX_HEIGHT_POSITION) position = Constants.Slides.MAX_HEIGHT_POSITION;
 
-        toTargetPosition(position, Constants.Slides.MAX_POWER);
+        setTargetPosition(position, Constants.Slides.MAX_POWER);
+    }
+
+    public void setPositionToBottom() {
+        if(getPosition() == Constants.Slides.MIN_HEIGHT_POSITION) return;
+        setTargetPosition(Constants.Slides.MIN_HEIGHT_POSITION, Constants.Slides.MAX_POWER);
+    }
+
+    public void setPositionToPreviousStep() {
+        setTargetPosition(previousPosition, Constants.Slides.MAX_POWER);
     }
 
     public static enum IncrementDirection {

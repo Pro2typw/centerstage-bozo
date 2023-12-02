@@ -42,8 +42,10 @@ public class Teleop  extends LinearOpMode {
             if(jpgamepad1.dpad_down()) slides.incrementStep(Slides.IncrementDirection.DOWN_MAJOR); // TODO: button config
             if(jpgamepad1.dpad_right()) slides.incrementStep(Slides.IncrementDirection.UP_MINOR); // TODO: button config
             if(jpgamepad1.dpad_left()) slides.incrementStep(Slides.IncrementDirection.DOWN_MINOR); // TODO: button config
+            if(jpgamepad1.b()) slides.setPositionToPreviousStep(); // TODO: button config
             if(jpgamepad1.left_bumper()) claw.inverseLeftClawState(); // TODO: button config
             if(jpgamepad1.right_bumper()) claw.inverseRightClawState(); // TODO: button config
+
 
 
             telemetry.addData("Current Slide Position", slides.getPosition());
