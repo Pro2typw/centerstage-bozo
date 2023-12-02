@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.vision.pipelines;
 
-import org.firstinspires.ftc.teamcode.vision.util.TeamPropROI;
+import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -13,7 +13,7 @@ public class RedPropDetection extends OpenCvPipeline {
     Mat testMat = new Mat();
     Mat finalMat = new Mat();
 
-    TeamPropROI output = TeamPropROI.LEFT;
+    TeamPropLocation output = TeamPropLocation.LEFT;
 
     private static final Rect LEFT_RECTANGLE = new Rect(  // TODO
             new Point(0, 0),
@@ -52,17 +52,17 @@ public class RedPropDetection extends OpenCvPipeline {
         double maxValue = Math.max(Math.max(averagedLeftBox, averagedRightBox), averagedCenterBox);
 
         if(averagedLeftBox == maxValue) {
-            output = TeamPropROI.LEFT;
+            output = TeamPropLocation.LEFT;
             Imgproc.rectangle(input, LEFT_RECTANGLE, new Scalar(255, 255, 255));
             Imgproc.rectangle(input, CENTER_RECTANGLE, rectColor);
             Imgproc.rectangle(input, RIGHT_RECTANGLE, rectColor);
         } else if(averagedRightBox == maxValue) {
-            output = TeamPropROI.RIGHT;
+            output = TeamPropLocation.RIGHT;
             Imgproc.rectangle(input, LEFT_RECTANGLE, rectColor);
             Imgproc.rectangle(input, CENTER_RECTANGLE, rectColor);
             Imgproc.rectangle(input, RIGHT_RECTANGLE, new Scalar(255, 255, 255));
         } else {
-            output = TeamPropROI.CENTER;
+            output = TeamPropLocation.CENTER;
             Imgproc.rectangle(input, LEFT_RECTANGLE, rectColor);
             Imgproc.rectangle(input, CENTER_RECTANGLE, new Scalar(255, 255, 255));
             Imgproc.rectangle(input, RIGHT_RECTANGLE, rectColor);
@@ -74,7 +74,7 @@ public class RedPropDetection extends OpenCvPipeline {
         return input;
     }
 
-    public TeamPropROI getOutput() {
+    public TeamPropLocation getOutput() {
         return output;
     }
 }
