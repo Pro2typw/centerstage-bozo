@@ -9,28 +9,35 @@ import org.firstinspires.ftc.teamcode.util.gamepad.JustPressed;
 
 @TeleOp(name = "Claw Position Test", group = "Test")
 public class ClawPositionTest extends LinearOpMode {
-
-    Servo claw;
-
+    Claw claw;
     JustPressed gp;
     @Override
     public void runOpMode() throws InterruptedException {
-        claw = hardwareMap.get(Servo.class, "rightClaw");
+        claw = new Claw(hardwareMap);
 
-        telemetry.addData("Right Claw Position", claw.getPosition());
+        telemetry.addData("Right Claw Position", claw.getRightClawPosition());
+        telemetry.addData("Left Claw Position", claw.getLeftClawPosition());
         telemetry.update();
+
+        gp = new JustPressed(gamepad1);
 
         waitForStart();
 
         while(opModeIsActive()) {
-            if(gamepad1.dpad_right) claw.setPosition(claw.getPosition() + .05);
-            if(gamepad1.dpad_left) claw.setPosition((claw.getPosition() - .05));
+            if(gp.left_bumper()) claw.inverseLeftClawState();
+            if(gp.right_bumper()) claw.inverseRightClawState();
+            if(gp.a()){
+                claw.inverseRightClawState();
+                claw.inverseLeftClawState();
+            }
 
-            if(gamepad1.right_bumper) claw.setPosition((claw.getPosition() + .01));
-            if(gamepad1.left_bumper) claw.setPosition((claw.getPosition() - .01));
+            claw.setLeftClawPosition(claw.getLeftClawPosition() + gp.left_stick_x() * .0001);
+            claw.setRightClawPosition(claw.getRightClawPosition() + gp.right_stick_x() * .0001);
 
-            telemetry.addData("Right Claw Position", claw.getPosition());
+            telemetry.addData("Right Claw Position", claw.getRightClawPosition());
+            telemetry.addData("Left Claw Position", claw.getLeftClawPosition());
             telemetry.update();
+            gp.update();
         }
     }
 }
