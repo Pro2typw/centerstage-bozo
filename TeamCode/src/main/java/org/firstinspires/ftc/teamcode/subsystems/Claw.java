@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.subsystems.util.Constants;
 
 public class Claw {
+
 
     public static enum ClawState {
         OPEN,
@@ -22,8 +24,8 @@ public class Claw {
         rightClawState = ClawState.OPEN;
         leftClawState = ClawState.OPEN;
 
-        setRightClawPosition(0);
-        setLeftClawPosition(0);
+        setRightClawPosition(Constants.Claw.RIGHT_CLAW_OPEN_POSITION);
+        setLeftClawPosition(Constants.Claw.LEFT_CLAW_OPEN_POSITION);
     }
 
     public void setRightClawPosition(double position) {
@@ -63,7 +65,7 @@ public class Claw {
                 break;
             case CLOSE:
                 setLeftClawPosition(Constants.Claw.LEFT_CLAW_CLOSE_POSITION);
-                leftClawState = ClawState.OPEN;
+                leftClawState = ClawState.CLOSE;
                 break;
         }
     }
@@ -75,4 +77,5 @@ public class Claw {
     public void inverseLeftClawState() {
         setLeftClawState(leftClawState == ClawState.OPEN? ClawState.CLOSE : ClawState.OPEN);
     }
+
 }
