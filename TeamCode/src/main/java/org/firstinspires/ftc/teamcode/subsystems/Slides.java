@@ -17,6 +17,8 @@ public class Slides {
 
         position = 0;
         previousPosition = 0;
+
+        slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setPower(double power) {
@@ -28,14 +30,14 @@ public class Slides {
     }
 
     public void setTargetPosition(int position, double power) {
-        previousPosition = getPosition();
+        previousPosition = getCurrentPosition();
         slides.setTargetPosition(position);
         setPower(power);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public int getPosition() {
-        return position;
+    public int getCurrentPosition() {
+        return slides.getCurrentPosition();
     }
 
     public void incrementStep(IncrementDirection direction) {
@@ -51,7 +53,7 @@ public class Slides {
     }
 
     public void setPositionToBottom() {
-        if(getPosition() == Constants.Slides.MIN_HEIGHT_POSITION) return;
+        if(getCurrentPosition() == Constants.Slides.MIN_HEIGHT_POSITION) return;
         setTargetPosition(Constants.Slides.MIN_HEIGHT_POSITION, Constants.Slides.MAX_POWER);
     }
 
