@@ -9,10 +9,10 @@ public class Constants {
     public static class Arm {
         public static final String ARM_MAP_NAME = "arm";
         public static final String WRIST_MAP_NAME = "wrist";
-        public static final double ARM_INTAKE_POSITION = 0.6533333333333333;
-        public static final double WRIST_INTAKE_POSITION = 0.7955555555555556   ;
-        public static final double ARM_DEPOSIT_POSITION = 0.778888888888889; // todo: config me
-        public static final double WRIST_DEPOSIT_POSITION = 0.8061111111111112; // todo: config me
+        public static final double ARM_INTAKE_POSITION = .14;
+        public static final double WRIST_INTAKE_POSITION = .7;
+        public static final double ARM_DEPOSIT_POSITION = .25; // todo: config me
+        public static final double WRIST_DEPOSIT_POSITION = .9; // todo: config me
 
 
     }

@@ -12,15 +12,24 @@ public class Launcher {
 
     public CRServo servo;
 
+    public static enum LaunchState{
+        LAUCHING,
+        STOP
+    }
+
+    public LaunchState LauncherState;
+
     public Launcher(@NonNull HardwareMap hardwareMap) {
         servo = hardwareMap.get(CRServo.class, Constants.Launcher.LAUNCHER_MAP_NAME);
+        LauncherState = LaunchState.STOP;
+    }
+    public void activateLauncher(LaunchState state){
+        if(state == LaunchState.STOP) servo.setPower(0);
+        else servo.setPower(Constants.Launcher.LAUNCHER_LAUNCH_POWER);
     }
 
-    public void launch() {
-        servo.setPower(Constants.Launcher.LAUNCHER_LAUNCH_POWER);
-    }
+    public void switchState(){
+        activateLauncher(LauncherState == LaunchState.STOP? LaunchState.LAUCHING: LaunchState.STOP);
 
-    public void stop() {
-        servo.setPower(0);
     }
 }

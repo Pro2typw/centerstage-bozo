@@ -112,8 +112,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
             motor.setMotorType(motorConfigurationType);
+            motor.setDirection(DcMotorSimple.Direction.REVERSE);
         }
-
 
         if (RUN_USING_ENCODER) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -141,17 +141,17 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightFront.setPower(v3);
     }
 
-    public void setPowersByGamepadRobotCentric(double x, double y, double rx, Function<Double, Double> func) {
+    public void setPowersByGamepadRobotCentric(double x, double y, double rx, double multiplier) {
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double lf = func.apply((y + x + rx) / denominator);
-        double lb = func.apply((y - x + rx) / denominator);
-        double rb = func.apply((y + x - rx) / denominator);
-        double rf = func.apply((y - x - rx) / denominator);
+        double lf = ((y + x + rx) / denominator);
+        double lb = ((y - x + rx) / denominator);
+        double rb = ((y + x - rx) / denominator);
+        double rf = ((y - x - rx) / denominator);
 
-        leftFront.setPower(lf);
-        leftRear.setPower(lb);
-        rightRear.setPower(rb);
-        rightFront.setPower(rf);
+        leftFront.setPower(lf * multiplier);
+        leftRear.setPower(lb * multiplier);
+        rightRear.setPower(rb * multiplier);
+        rightFront.setPower(rf * multiplier);
     }
 
     public void setPowersByGamepadFieldCentric(double x, double y, double rx, Function<Double, Double> func) {
