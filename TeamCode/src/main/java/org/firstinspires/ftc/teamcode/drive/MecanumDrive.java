@@ -30,12 +30,10 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
@@ -108,11 +106,13 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
             motor.setMotorType(motorConfigurationType);
-            motor.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         if (RUN_USING_ENCODER) {
@@ -218,6 +218,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
                         .build()
         );
     }
+
 
     public void followTrajectory(Trajectory trajectory) {
         followTrajectoryAsync(trajectory);

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -48,6 +49,10 @@ public class MaxVelocityTuner extends LinearOpMode {
         telemetry.addLine("Please ensure you have enough space cleared.");
         telemetry.addLine("");
         telemetry.addLine("Press start when ready.");
+        List<Double> ticks = drive.getWheelPositions();
+        for(int i = 0; i < ticks.size(); i++) {
+            telemetry.addData("Wheel" + i, ticks.get(i));
+        }
         telemetry.update();
 
         waitForStart();
@@ -62,6 +67,12 @@ public class MaxVelocityTuner extends LinearOpMode {
             drive.updatePoseEstimate();
 
             Pose2d poseVelo = Objects.requireNonNull(drive.getPoseVelocity(), "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.");
+
+            ticks = drive.getWheelPositions();
+            for(int i = 0; i < ticks.size(); i++) {
+                telemetry.addData("Wheel " + i, ticks.get(i));
+            }
+            telemetry.update();
 
             maxVelocity = Math.max(poseVelo.vec().norm(), maxVelocity);
         }

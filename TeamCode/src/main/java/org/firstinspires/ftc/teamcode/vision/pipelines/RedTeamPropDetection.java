@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.vision.pipelines;
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.vision.util.TeamPropROI;
+import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -18,7 +18,7 @@ public class RedTeamPropDetection implements VisionProcessor {
     Mat lowMat = new Mat();
     Mat finalMat = new Mat();
 
-    TeamPropROI outStr = TeamPropROI.LEFT;
+    TeamPropLocation outStr = TeamPropLocation.LEFT;
 
     private final Scalar rectColor = new Scalar(0, 0, 0);
     static final Rect LEFT_RECTANGLE = new Rect(
@@ -73,29 +73,29 @@ public class RedTeamPropDetection implements VisionProcessor {
         double maxValue = Math.max(Math.max(averagedLeftBox, averagedRightBox), averagedCenterBox);
 
         if(averagedLeftBox == maxValue) {
-            outStr = TeamPropROI.LEFT;
+            outStr = TeamPropLocation.LEFT;
         }
         else if(averagedRightBox == maxValue) {
-            outStr = TeamPropROI.RIGHT;
+            outStr = TeamPropLocation.RIGHT;
         }
         else {
-            outStr = TeamPropROI.CENTER;
+            outStr = TeamPropLocation.CENTER;
         }
 
         if(averagedLeftBox == maxValue) {
-            outStr = TeamPropROI.LEFT;
+            outStr = TeamPropLocation.LEFT;
             Imgproc.rectangle(frame, LEFT_RECTANGLE, new Scalar(255, 255, 255));
             Imgproc.rectangle(frame, CENTER_RECTANGLE, rectColor);
             Imgproc.rectangle(frame, RIGHT_RECTANGLE, rectColor);
         }
         else if(averagedRightBox == maxValue) {
-            outStr = TeamPropROI.RIGHT;
+            outStr = TeamPropLocation.RIGHT;
             Imgproc.rectangle(frame, LEFT_RECTANGLE, rectColor);
             Imgproc.rectangle(frame, CENTER_RECTANGLE, rectColor);
             Imgproc.rectangle(frame, RIGHT_RECTANGLE, new Scalar(255, 255, 255));
         }
         else {
-            outStr = TeamPropROI.CENTER;
+            outStr = TeamPropLocation.CENTER;
             Imgproc.rectangle(frame, LEFT_RECTANGLE, rectColor);
             Imgproc.rectangle(frame, CENTER_RECTANGLE, new Scalar(255, 255, 255));
             Imgproc.rectangle(frame, RIGHT_RECTANGLE, rectColor);
@@ -107,7 +107,7 @@ public class RedTeamPropDetection implements VisionProcessor {
         return frame;
     }
 
-    public TeamPropROI getPropPosition(){
+    public TeamPropLocation getPropPosition(){
         return outStr;
     }
 

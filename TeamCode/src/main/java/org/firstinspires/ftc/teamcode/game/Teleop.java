@@ -44,8 +44,8 @@ public class Teleop  extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
-            if(dtSlowMode) drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), jpgamepad1.right_stick_x(), .3);
-            else drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), jpgamepad1.right_stick_x(), .75);
+            if(dtSlowMode) drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), -jpgamepad1.right_stick_x(), .3);
+            else drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), -jpgamepad1.right_stick_x(), .75);
             // TODO: Get better multiplier Sahas; and change apply function?
 //`         uncomment for launcher
 //            if(jpgamepad2.a()) launcher.switchState(); // TODO: button config
