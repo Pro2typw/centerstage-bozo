@@ -39,7 +39,8 @@ public class HardwareTest extends LinearOpMode {
     public static double SERVO3_POSITION = -1;
     public static double SERVO4_POSITION = -1;
     public static double SERVO5_POSITION = -1;
-    public static String SELECTED_LYNX_MODULE_NAME = "Control Hub";
+    public static String CONTROL_HUB_NAME = "Control Hub";
+    public static String EXPANSION_HUB_NAME = "Expansion Hub";
 
     public boolean controlHubLastSelected = CONTROL_HUB_SELECTED;
 
@@ -97,24 +98,28 @@ public class HardwareTest extends LinearOpMode {
                 controlHubLastSelected = CONTROL_HUB_SELECTED;
                 resetValues();
 
-                for (LynxModule lynxModule : lynxModules) {
-                    if (LynxConstants.isEmbeddedSerialNumber(lynxModule.getSerialNumber()) == CONTROL_HUB_SELECTED) {
-                        activeLynxModule = lynxModule;
-                        break;
-                    }
-                }
-                for (LynxDcMotorController motorController : motorControllers) {
-                    if (LynxConstants.isEmbeddedSerialNumber(motorController.getSerialNumber()) == CONTROL_HUB_SELECTED) {
-                        activeMotorController = motorController;
-                        break;
-                    }
-                }
-                for (LynxServoController servoController : servoControllers) {
-                    if (LynxConstants.isEmbeddedSerialNumber(servoController.getSerialNumber()) == CONTROL_HUB_SELECTED) {
-                        activeServoController = servoController;
-                        break;
-                    }
-                }
+                activeLynxModule = hardwareMap.get(LynxModule.class, CONTROL_HUB_SELECTED ? CONTROL_HUB_NAME : EXPANSION_HUB_NAME);
+                activeMotorController = hardwareMap.get(LynxDcMotorController.class, CONTROL_HUB_SELECTED ? CONTROL_HUB_NAME : EXPANSION_HUB_NAME);
+                activeServoController = hardwareMap.get(LynxServoController.class, CONTROL_HUB_SELECTED ? CONTROL_HUB_NAME : EXPANSION_HUB_NAME);
+
+//                for (LynxModule lynxModule : lynxModules) {
+//                    if (LynxConstants.isEmbeddedSerialNumber(lynxModule.getSerialNumber()) == CONTROL_HUB_SELECTED) {
+//                        activeLynxModule = lynxModule;
+//                        break;
+//                    }
+//                }
+//                for (LynxDcMotorController motorController : motorControllers) {
+//                    if (LynxConstants.isEmbeddedSerialNumber(motorController.getSerialNumber()) == CONTROL_HUB_SELECTED) {
+//                        activeMotorController = motorController;
+//                        break;
+//                    }
+//                }
+//                for (LynxServoController servoController : servoControllers) {
+//                    if (LynxConstants.isEmbeddedSerialNumber(servoController.getSerialNumber()) == CONTROL_HUB_SELECTED) {
+//                        activeServoController = servoController;
+//                        break;
+//                    }
+//                }
 
                 activeMotors.clear();
                 activeServos.clear();

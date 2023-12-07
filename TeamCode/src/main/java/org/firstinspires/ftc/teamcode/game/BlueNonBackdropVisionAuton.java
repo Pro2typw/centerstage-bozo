@@ -11,15 +11,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.pipelines.RedPropDetection;
-import org.firstinspires.ftc.teamcode.vision.pipelines.RedTeamPropDetection;
 import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 
 @Autonomous(group = "LM2 Game")
-public class RedBackdropVisionAuton extends LinearOpMode {
+public class BlueNonBackdropVisionAuton extends LinearOpMode {
 
     VisionPortal portal;
     RedPropDetection redPropDetection;

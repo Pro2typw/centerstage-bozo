@@ -15,6 +15,7 @@ public class Claw {
     }
 
     private Servo rightClaw, leftClaw;
+
     private ClawState rightClawState, leftClawState;
 
     public Claw(HardwareMap hardwareMap) {
@@ -77,5 +78,14 @@ public class Claw {
     public void inverseLeftClawState() {
         setLeftClawState(leftClawState == ClawState.OPEN? ClawState.CLOSE : ClawState.OPEN);
     }
+
+    public ClawState getRightClawState() {
+        return rightClawState;
+    }
+
+    public ClawState getLeftClawState() {
+        return leftClawState;
+    }
+
 
 }

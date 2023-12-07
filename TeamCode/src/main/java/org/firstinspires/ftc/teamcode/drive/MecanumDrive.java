@@ -30,11 +30,10 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
@@ -80,6 +79,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     private Pose2d startPose;
 
+
+
     public MecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
@@ -105,12 +106,14 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
             motor.setMotorType(motorConfigurationType);
         }
-
 
         if (RUN_USING_ENCODER) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -126,11 +129,9 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
-//        TODO: Check Control Hub and fix it
-//        new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        imu.initialize(parameters);
     }
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
@@ -152,6 +153,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightRear.setPower(rb);
         rightFront.setPower(rf);
     }
+
 
     public void setPowersByGamepadFieldCentric(double x, double y, double rx, Function<Double, Double> func) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
@@ -218,7 +220,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         );
     }
 
-    public void followTrajectory(TrajectorySequence trajectory) {
+
+    public void followTrajectory(Trajectory trajectory) {
         followTrajectoryAsync(trajectory);
         waitForIdle();
     }
@@ -312,6 +315,15 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         return wheelVelocities;
     }
 
+    public double getAverageWheelVelocity() {
+        List<Double> wheelVelocities = getWheelVelocities();
+        double sum = 0;
+        for(double velo : wheelVelocities) {
+            sum += velo;
+        }
+
+        return sum / wheelVelocities.size();
+    }
 
 
     @Override
@@ -321,7 +333,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) -imu.getAngularVelocity().xRotationRate;
+        return (double) imu.getAngularVelocity().zRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
