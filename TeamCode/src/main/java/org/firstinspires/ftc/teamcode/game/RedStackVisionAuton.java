@@ -17,7 +17,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 
 @Autonomous(group = "LM2 Game")
-public class BlueNonBackdropVisionAuton extends LinearOpMode {
+public class RedStackVisionAuton extends LinearOpMode {
 
     VisionPortal portal;
     RedPropDetection redPropDetection;
@@ -30,56 +30,33 @@ public class BlueNonBackdropVisionAuton extends LinearOpMode {
 
         drive = new MecanumDrive(hardwareMap);
 
-        final Pose2d startPose = new Pose2d(12, -72+11.2, Math.toRadians(90));
+        final Pose2d startPose = new Pose2d(-36, -72+11.2, Math.toRadians(90));
 
         Trajectory left = drive.trajectoryBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(12, -35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-36, 36, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
                 })
-                .lineToLinearHeading(new Pose2d( 25, -35, Math.toRadians(180)))
-                .addDisplacementMarker(() -> {
-                    // Extend slides
-                })
-                .lineToLinearHeading(new Pose2d(46, -35, Math.toRadians(0)))
-                .addDisplacementMarker(() -> {
-                    // Place pixel on backdrop
-                })
-                .strafeRight(5)
-                .splineToLinearHeading(new Pose2d(59, -60), Math.toRadians(0))
+                .lineTo(new Vector2d(-36, 12))
+                .lineTo(new Vector2d(60, 12))
                 .build();
 
         Trajectory center = drive.trajectoryBuilder(startPose)
-                .lineTo(new Vector2d(12, -35))
+                .lineTo(new Vector2d(-36, -36))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
                 })
-                .lineToLinearHeading(new Pose2d( 25, -35, Math.toRadians(90)))
-                .addDisplacementMarker(() -> {
-                    // Extend slides
-                })
-                .lineToLinearHeading(new Pose2d(46, -35, Math.toRadians(0)))
-                .addDisplacementMarker(() -> {
-                    // Place pixel on backdrop
-                })
-                .strafeRight(5)
-                .splineToLinearHeading(new Pose2d(59, -60), Math.toRadians(0))
+                .lineTo(new Vector2d(12, -36))
+                .splineTo(new Vector2d(60, -12), Math.toRadians(0))
                 .build();
 
         Trajectory right = drive.trajectoryBuilder(startPose)
-                .splineToSplineHeading(new Pose2d(36, -36, Math.toRadians(180)), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-36, -36, Math.toRadians(0)))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
                 })
-                .addDisplacementMarker(() -> {
-                    // Extend slides
-                })
-                .lineToLinearHeading(new Pose2d(46, -35, Math.toRadians(0)))
-                .addDisplacementMarker(() -> {
-                    // Place pixel on backdrop
-                })
-                .strafeRight(5)
-                .splineToLinearHeading(new Pose2d(59, -60), Math.toRadians(0))
+                .lineTo(new Vector2d(-36, -12))
+                .lineTo(new Vector2d(60, -12))
                 .build();
 
         redPropDetection = new RedPropDetection();

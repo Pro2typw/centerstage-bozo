@@ -20,7 +20,7 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 
 @Autonomous(group = "LM2 Game")
 public class RedBackdropVisionAuton extends LinearOpMode {
-
+// DONE
     VisionPortal portal;
     RedPropDetection redPropDetection;
     WebcamName webcamName;

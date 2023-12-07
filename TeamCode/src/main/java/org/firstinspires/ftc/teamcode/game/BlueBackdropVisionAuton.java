@@ -18,6 +18,7 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 
 @Autonomous(group = "LM2 Game")
 public class BlueBackdropVisionAuton extends LinearOpMode {
+    // DONE
 
     VisionPortal portal;
     RedPropDetection redPropDetection;
@@ -67,19 +68,19 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
                 .build();
 
         Trajectory right = drive.trajectoryBuilder(startPose)
-                .splineToSplineHeading(new Pose2d(36, -36, Math.toRadians(180)), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(36, 36, Math.toRadians(0)), Math.toRadians(270))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
                 })
                 .addDisplacementMarker(() -> {
                     // Extend slides
                 })
-                .lineToLinearHeading(new Pose2d(46, -35, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(46, 35, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     // Place pixel on backdrop
                 })
                 .strafeRight(5)
-                .splineToLinearHeading(new Pose2d(59, -60), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(59, 60, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
         redPropDetection = new RedPropDetection();
