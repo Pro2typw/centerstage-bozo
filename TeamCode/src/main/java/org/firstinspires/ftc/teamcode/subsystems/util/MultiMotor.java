@@ -24,6 +24,13 @@ public class MultiMotor implements DcMotorEx {
         }
     }
 
+    public MultiMotor(MultiMotor multiMotor) {
+        motors = new DcMotorEx[names.length];
+        for (int i = 0; i < names.length; i ++) {
+            motors[i] = hardwareMap.get(DcMotorEx.class, names[i]);
+        }
+    }
+
 
     @Override
     public void setMotorEnable() {

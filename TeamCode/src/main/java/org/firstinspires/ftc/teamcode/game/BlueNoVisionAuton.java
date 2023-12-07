@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Hang;
 
 @Autonomous(name = "Blue No Vision Auton", group = "LM1 Game")
 public class BlueNoVisionAuton extends LinearOpMode {
@@ -20,7 +19,6 @@ public class BlueNoVisionAuton extends LinearOpMode {
     }
 
     MecanumDrive mecanumDrive;
-    Hang hang;
     States states = States.STATE1;
 
     double opModeInitRuntime;

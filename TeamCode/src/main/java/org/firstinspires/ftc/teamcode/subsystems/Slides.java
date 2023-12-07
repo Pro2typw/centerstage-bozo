@@ -8,39 +8,31 @@ import org.firstinspires.ftc.teamcode.subsystems.util.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.util.MultiMotor;
 
 import java.util.Queue;
+import java.util.Stack;
 
-public class Slides {
+public class Slides extends MultiMotor{
     private MultiMotor slides;
-    private int position, previousPosition;
-//    Queue<Integer> previousPositions = new Queue<Integer>();
+    private int position;
+    Stack<Integer> previousPositions;
     public Slides(HardwareMap hardwareMap) {
+        super(hardwareMap, Constants.Slides.LEFT_SLIDE_MAP_NAME, Constants.Slides.RIGHT_SLIDE_MAP_NAME);
         slides = new MultiMotor(hardwareMap, Constants.Slides.LEFT_SLIDE_MAP_NAME, Constants.Slides.RIGHT_SLIDE_MAP_NAME);
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slides.setDirection(DcMotorSimple.Direction.REVERSE);
 
         position = 0;
-        previousPosition = 0;
+        previousPositions = new Stack<>();
 
         slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
 
-    public void setPower(double power) {
-        slides.setPower(power);
-    }
 
-    public void setMode(DcMotor.RunMode mode) {
-        slides.setMode(mode);
     }
 
     public void setTargetPosition(int position, double power) {
-        previousPosition = getCurrentPosition();
+        previousPositions.add(getCurrentPosition());
         slides.setTargetPosition(position);
         setPower(power);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-    public int getCurrentPosition() {
-        return slides.getCurrentPosition();
     }
 
     public void incrementStep(IncrementDirection direction) {
@@ -61,7 +53,7 @@ public class Slides {
     }
 
     public void setPositionToPreviousStep() {
-        setTargetPosition(previousPosition, Constants.Slides.MAX_POWER);
+        setTargetPosition(previousPositions.pop(), Constants.Slides.MAX_POWER);
     }
 
     public static enum IncrementDirection {
