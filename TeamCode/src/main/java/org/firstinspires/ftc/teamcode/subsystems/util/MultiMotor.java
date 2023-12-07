@@ -12,9 +12,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 public class MultiMotor implements DcMotorEx {
     public DcMotorEx[] motors;
+    private String[] names;
 
     public MultiMotor(DcMotorEx... motors) {
         this.motors = motors;
+
+        names = new String[motors.length];
+        for(int i = 0; i < motors.length; i ++) {
+            names[i] = motors[i].getDeviceName();
+        }
     }
 
     public MultiMotor(HardwareMap hardwareMap, String... names) {
@@ -23,14 +29,6 @@ public class MultiMotor implements DcMotorEx {
             motors[i] = hardwareMap.get(DcMotorEx.class, names[i]);
         }
     }
-
-    public MultiMotor(MultiMotor multiMotor) {
-        motors = new DcMotorEx[names.length];
-        for (int i = 0; i < names.length; i ++) {
-            motors[i] = hardwareMap.get(DcMotorEx.class, names[i]);
-        }
-    }
-
 
     @Override
     public void setMotorEnable() {
