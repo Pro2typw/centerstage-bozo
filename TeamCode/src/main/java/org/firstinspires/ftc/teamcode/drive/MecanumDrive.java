@@ -106,8 +106,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -141,18 +141,19 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightFront.setPower(v3);
     }
 
-    public void setPowersByGamepadRobotCentric(double x, double y, double rx, double multiplier) {
+    public void setPowersByGamepadRobotCentric(double x, double y, double rx, Function<Double, Double> func) {
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double lf = ((y + x + rx) / denominator);
-        double lb = ((y - x + rx) / denominator);
-        double rb = ((y + x - rx) / denominator);
-        double rf = ((y - x - rx) / denominator);
+        double lf = func.apply((y + x + rx) / denominator);
+        double lb = func.apply((y - x + rx) / denominator);
+        double rb = func.apply((y + x - rx) / denominator);
+        double rf = func.apply((y - x - rx) / denominator);
 
-        leftFront.setPower(lf * multiplier);
-        leftRear.setPower(lb * multiplier);
-        rightRear.setPower(rb * multiplier);
-        rightFront.setPower(rf * multiplier);
+        leftFront.setPower(lf);
+        leftRear.setPower(lb);
+        rightRear.setPower(rb);
+        rightFront.setPower(rf);
     }
+
 
     public void setPowersByGamepadFieldCentric(double x, double y, double rx, Function<Double, Double> func) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
@@ -314,6 +315,15 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         return wheelVelocities;
     }
 
+    public double getAverageWheelVelocity() {
+        List<Double> wheelVelocities = getWheelVelocities();
+        double sum = 0;
+        for(double velo : wheelVelocities) {
+            sum += velo;
+        }
+
+        return sum / wheelVelocities.size();
+    }
 
 
     @Override

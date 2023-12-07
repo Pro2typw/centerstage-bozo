@@ -14,23 +14,25 @@ public class Constants {
         public static final double ARM_DEPOSIT_POSITION = .25; // todo: config me
         public static final double WRIST_DEPOSIT_POSITION = .9; // todo: config me
 
-
     }
+    @Config
     public static class Slides {
-        public static final String LEFT_SLIDE_MAP_NAME = "slide1"; // TODO: maybe left and name is reverse
+        public static final String LEFT_SLIDE_MAP_NAME = "slide1";
         public static final String RIGHT_SLIDE_MAP_NAME = "slide2";
-
 
         public static final int MAX_HEIGHT_POSITION = 4100; //<-safety; max attempted is 4211
         public static final int MIN_HEIGHT_POSITION = 0;
 
         public static final double MAX_POWER = .7; // TODO: too fast?
 
-        public static final double SLIDE_MAJOR_INCREMENTS_TICKS = 1000; // TODO: adjust with test
-        public static final double SLIDE_MINOR_INCREMENTS_TICKS = 300; // TODO: adjust with test
+        public static final double SLIDE_MAJOR_INCREMENTS_TICKS = 1000;
+        public static final double SLIDE_MINOR_INCREMENTS_TICKS = 300;
+
+        public static final int SLIDE_INIT_HANG_POSITION = 3300;
+        public static final int SLIDE_CLIMB_HANG_POSITION = 3300;
 
     }
-
+    @Config
     public static class Claw {
         public static final String RIGHT_CLAW_MAP_NAME = "rightClaw";
         public static final String LEFT_CLAW_MAP_NAME = "leftClaw";
@@ -42,7 +44,7 @@ public class Constants {
 
 
     }
-
+    @Config
     public static class Launcher {
         public static final String LAUNCHER_MAP_NAME = "servo";
 

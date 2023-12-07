@@ -7,9 +7,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.subsystems.util.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.util.MultiMotor;
 
+import java.util.Queue;
+
 public class Slides {
     private MultiMotor slides;
     private int position, previousPosition;
+//    Queue<Integer> previousPositions = new Queue<Integer>();
     public Slides(HardwareMap hardwareMap) {
         slides = new MultiMotor(hardwareMap, Constants.Slides.LEFT_SLIDE_MAP_NAME, Constants.Slides.RIGHT_SLIDE_MAP_NAME);
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
