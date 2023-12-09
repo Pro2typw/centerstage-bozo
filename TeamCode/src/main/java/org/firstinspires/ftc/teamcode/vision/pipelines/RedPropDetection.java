@@ -19,7 +19,6 @@ public class RedPropDetection implements VisionProcessor {
     private Mat finalMat = new Mat();
     private final Scalar rectColor = new Scalar(255, 0, 0);
 
-    Telemetry telemetry;
 
     private TeamPropLocation output = TeamPropLocation.LEFT;
 
@@ -44,9 +43,6 @@ public class RedPropDetection implements VisionProcessor {
     private Scalar lower = new Scalar(values[0] - tolerance < 0? 0: values[0] - tolerance,values[1] - tolerance < 0? 0: values[1] - tolerance, values[2] - tolerance < 0? 0: values[2] - tolerance);
     private Scalar upper = new Scalar(values[0] + tolerance > 255? 255: values[0] + tolerance,values[1] + tolerance > 255? 255: values[1] + tolerance, values[2] + tolerance > 255? 255: values[2] + tolerance);
 
-    public RedPropDetection(Telemetry telemetry) {
-        this.telemetry = telemetry;
-    }
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
@@ -73,20 +69,9 @@ public class RedPropDetection implements VisionProcessor {
         else if(max == averagedCenterBox) output = TeamPropLocation.CENTER;
         else output = TeamPropLocation.RIGHT;
 
-
-
-
-
-        finalMat.copyTo(frame);
-        Imgproc.rectangle(frame, LEFT_RECTANGLE, new Scalar(255, 255, 0));
+        Imgproc.rectangle(frame, LEFT_RECTANGLE, rectColor);
         Imgproc.rectangle(frame, CENTER_RECTANGLE, rectColor);
         Imgproc.rectangle(frame, RIGHT_RECTANGLE, rectColor);
-
-        telemetry.addData("Output", getPropPosition());
-        telemetry.addData("left", averagedLeftBox);
-        telemetry.addData("center", averagedCenterBox);
-        telemetry.addData("right", averagedRightBox);
-        telemetry.update();
 
         return null;
     }

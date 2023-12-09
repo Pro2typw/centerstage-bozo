@@ -11,16 +11,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.util.TelemetryUtil;
+import org.firstinspires.ftc.teamcode.vision.pipelines.BluePropDetection;
 import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 
-@Autonomous(group = "LM2 Game")
+@Autonomous(group = "LM2 Blue Backdrop")
 public class BlueBackdropVisionAuton extends LinearOpMode {
     // DONE
 
     VisionPortal portal;
-    RedPropDetection redPropDetection;
+    BluePropDetection bluePropDetection;
     WebcamName webcamName;
     TeamPropLocation location;
     MecanumDrive drive;
@@ -32,7 +35,7 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
 
         final Pose2d startPose = new Pose2d(12, 72-11.2, Math.toRadians(90));
 
-        Trajectory left = drive.trajectoryBuilder(startPose)
+        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(12, 35, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
@@ -49,7 +52,7 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(59, 60), Math.toRadians(0))
                 .build();
 
-        Trajectory center = drive.trajectoryBuilder(startPose)
+        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
                 .lineTo(new Vector2d(12, 35))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
@@ -66,7 +69,7 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(59, 60), Math.toRadians(0))
                 .build();
 
-        Trajectory right = drive.trajectoryBuilder(startPose)
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
                 .splineToSplineHeading(new Pose2d(36, 36, Math.toRadians(0)), Math.toRadians(270))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
@@ -82,7 +85,7 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(59, 60, Math.toRadians(180)), Math.toRadians(0))
                 .build();
 
-        redPropDetection = new RedPropDetection();
+        bluePropDetection = new BluePropDetection();
 
 
 
@@ -90,11 +93,13 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
                 .setCamera(webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .setCameraResolution(new Size(640, 480))  // you can go up to 720 x 960
                 .setCamera(BuiltinCameraDirection.FRONT)
-                .addProcessor((VisionProcessor) redPropDetection) // TODO: convert to vision processor
+                .addProcessor((VisionProcessor) bluePropDetection) // TODO: convert to vision processor
                 .build();
 
+        telemetry = TelemetryUtil.initTelemetry(telemetry);
+
         while(opModeInInit()) {
-            location = redPropDetection.getOutput();
+            location = bluePropDetection.getPropPosition();
             telemetry.addData("Vision Location", location.toString());
             telemetry.update();
         }
@@ -104,17 +109,19 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
 
         switch (location) {
             case LEFT:
-                drive.followTrajectory(left);
+                drive.followTrajectorySequenceAsync(left);
                 break;
             case CENTER:
-                drive.followTrajectory(center);
+                drive.followTrajectorySequenceAsync(center);
                 break;
             case RIGHT:
-                drive.followTrajectory(right);
+                drive.followTrajectorySequenceAsync(right);
         }
 
         while (opModeIsActive()) {
             drive.update();
+            telemetry.addData("pose estimate", drive.getPoseEstimate());
+            telemetry.update();
         }
 
     }
