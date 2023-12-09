@@ -61,8 +61,10 @@ public class Slides {
         setTargetPosition(Constants.Slides.MIN_HEIGHT_POSITION, Constants.Slides.MAX_POWER);
     }
 
-    public void setPositionToPreviousStep() {
-        setTargetPosition(previousPositions.pop(), Constants.Slides.MAX_POWER);
+    public void setPositionToPreviousStep(double power) {
+        slides.setTargetPosition(previousPositions.pop());
+        setPower(power);
+        setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public static enum IncrementDirection {

@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode.game;
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
@@ -17,7 +20,7 @@ import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 
-@Autonomous(group = "LM2 Red Backdrop")
+@Autonomous(name = "Red Backdrop", group = "LM2 Red Backdrop")
 public class RedBackdropVisionAuton extends LinearOpMode {
 // DONE
     VisionPortal portal;
@@ -28,6 +31,7 @@ public class RedBackdropVisionAuton extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         drive = new MecanumDrive(hardwareMap);
 
@@ -85,12 +89,12 @@ public class RedBackdropVisionAuton extends LinearOpMode {
 
         redPropDetection = new RedPropDetection();
 
-        portal = new VisionPortal.Builder()
-                .setCamera(webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .setCameraResolution(new Size(640, 480))  // you can go up to 720 x 960
-                .setCamera(BuiltinCameraDirection.FRONT)
-                .addProcessor((VisionProcessor) redPropDetection) // TODO: convert to vision processor
-                .build();
+//        portal = new VisionPortal.Builder()
+//                .setCamera(webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"))
+//                .setCameraResolution(new Size(640, 480))  // you can go up to 720 x 960
+//                .setCamera(BuiltinCameraDirection.FRONT)
+//                .addProcessor((VisionProcessor) redPropDetection) // TODO: convert to vision processor
+//                .build();
 
         drive.setPoseEstimate(startPose);
 

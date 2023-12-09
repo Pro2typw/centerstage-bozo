@@ -56,9 +56,9 @@ import java.util.function.Function;
 public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
 
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(6, 0.01, 0.01);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(4, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(7.5, 0, .1);
 
-    public static double LATERAL_MULTIPLIER = 1;
+    public static double LATERAL_MULTIPLIER = (59.481500549265895 / 47.5) * (59.76445413001071 / 59);
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -106,8 +106,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();

@@ -76,7 +76,7 @@ public class VisionTest implements VisionProcessor {
 
         finalMat.copyTo(frame);
 
-        return null;
+        return frame;
     }
 
     public String getPropPosition(){

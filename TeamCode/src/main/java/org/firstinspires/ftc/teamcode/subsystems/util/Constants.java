@@ -23,7 +23,7 @@ public class Constants {
         public static final int MAX_HEIGHT_POSITION = 4100; //<-safety; max attempted is 4211
         public static final int MIN_HEIGHT_POSITION = 0;
 
-        public static final double MAX_POWER = .7; // TODO: too fast?
+        public static final double MAX_POWER = .6;
 
         public static final double SLIDE_MAJOR_INCREMENTS_TICKS = 1000;
         public static final double SLIDE_MINOR_INCREMENTS_TICKS = 300;
@@ -37,10 +37,10 @@ public class Constants {
         public static final String RIGHT_CLAW_MAP_NAME = "rightClaw";
         public static final String LEFT_CLAW_MAP_NAME = "leftClaw";
 
-        public static final double RIGHT_CLAW_CLOSE_POSITION = .5; // TODO
-        public static final double LEFT_CLAW_CLOSE_POSITION = .47; // TODO
-        public static final double RIGHT_CLAW_OPEN_POSITION = .36; // TODO
-        public static final double LEFT_CLAW_OPEN_POSITION = .61; // TODO
+        public static final double RIGHT_CLAW_CLOSE_POSITION = .5;
+        public static final double LEFT_CLAW_CLOSE_POSITION = .47;
+        public static final double RIGHT_CLAW_OPEN_POSITION = .36;
+        public static final double LEFT_CLAW_OPEN_POSITION = .61;
 
 
     }
@@ -48,7 +48,7 @@ public class Constants {
     public static class Launcher {
         public static final String LAUNCHER_MAP_NAME = "servo";
 
-        public static final double LAUNCHER_LAUNCH_POWER = 1; // TODO: 1 should be fine :/
+        public static final double LAUNCHER_LAUNCH_POWER = 1;
     }
 
     public static class TurretConstants {

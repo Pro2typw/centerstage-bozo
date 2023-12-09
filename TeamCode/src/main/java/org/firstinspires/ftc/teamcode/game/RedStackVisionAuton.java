@@ -11,13 +11,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.pipelines.RedPropDetection;
 import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 
-@Autonomous(group = "LM2 Red Stack")
+@Autonomous(group = "LM2 Game")
 public class RedStackVisionAuton extends LinearOpMode {
 
     VisionPortal portal;
@@ -33,7 +32,7 @@ public class RedStackVisionAuton extends LinearOpMode {
 
         final Pose2d startPose = new Pose2d(-36, -72+11.2, Math.toRadians(90));
 
-        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
+        Trajectory left = drive.trajectoryBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(-36, 36, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
@@ -42,7 +41,7 @@ public class RedStackVisionAuton extends LinearOpMode {
                 .lineTo(new Vector2d(60, 12))
                 .build();
 
-        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
+        Trajectory center = drive.trajectoryBuilder(startPose)
                 .lineTo(new Vector2d(-36, -36))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
@@ -51,7 +50,7 @@ public class RedStackVisionAuton extends LinearOpMode {
                 .splineTo(new Vector2d(60, -12), Math.toRadians(0))
                 .build();
 
-        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+        Trajectory right = drive.trajectoryBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(-36, -36, Math.toRadians(0)))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
@@ -61,6 +60,8 @@ public class RedStackVisionAuton extends LinearOpMode {
                 .build();
 
         redPropDetection = new RedPropDetection();
+
+
 
         portal = new VisionPortal.Builder()
                 .setCamera(webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"))
@@ -77,15 +78,16 @@ public class RedStackVisionAuton extends LinearOpMode {
 
         waitForStart();
 
+
         switch (location) {
             case LEFT:
-                drive.followTrajectorySequence(left);
+                drive.followTrajectory(left);
                 break;
             case CENTER:
-                drive.followTrajectorySequence(center);
+                drive.followTrajectory(center);
                 break;
             case RIGHT:
-                drive.followTrajectorySequence(right);
+                drive.followTrajectory(right);
         }
 
         while (opModeIsActive()) {

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.game;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -40,7 +41,7 @@ public class Teleop  extends LinearOpMode {
 
 
         drive = new MecanumDrive(hardwareMap);
-//        launcher = new Launcher(hardwareMap);
+        launcher = new Launcher(hardwareMap);
         slides = new Slides(hardwareMap);
         claw = new Claw(hardwareMap);
         arm = new Arm(hardwareMap, slides);
@@ -54,17 +55,21 @@ public class Teleop  extends LinearOpMode {
                 drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), -jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .3 * (Math.abs(x)/x)));
             }
             else {
-                drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), -jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .75 * (Math.abs(x)/x)));
+                drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), -jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .65 * (Math.abs(x)/x)));
             }
             // TODO: Get better multiplier Sahas; and change apply function?
 
-//            if(jpgamepad2.a()) launcher.switchState(); // TODO: button config
+            // align vertically (for backdrop)
+            if (jpgamepad1.a())
+                drive.turnAsync(-Angle.normDelta(drive.getPoseEstimate().getHeading()));
+
+            if(jpgamepad2.a()) launcher.switchState(); // TODO: button config
 
             if(jpgamepad2.dpad_up()) slides.incrementStep(Slides.IncrementDirection.UP_MAJOR);
             if(jpgamepad2.dpad_down()) slides.incrementStep(Slides.IncrementDirection.DOWN_MAJOR);
             if(jpgamepad2.dpad_right()) slides.incrementStep(Slides.IncrementDirection.UP_MINOR);
             if(jpgamepad2.dpad_left()) slides.incrementStep(Slides.IncrementDirection.DOWN_MINOR);
-            if(jpgamepad2.x()) slides.setPositionToPreviousStep();
+            if(jpgamepad2.x()) slides.setPositionToPreviousStep(Constants.Slides.MAX_POWER);
             if(jpgamepad2.a()) slides.setPositionToBottom();
 
             if(jpgamepad1.left_bumper() || jpgamepad2.left_bumper()) claw.inverseLeftClawState();
@@ -89,6 +94,7 @@ public class Teleop  extends LinearOpMode {
                 }
             }
 
+            telemetry.addData("Pose Estimate", drive.getPoseEstimate());
             telemetry.addData("Slow Mode", dtSlowMode);
             telemetry.addData("Left Claw", claw.getLeftClawState());
             telemetry.addData("Right Claw", claw.getRightClawState());
