@@ -36,12 +36,6 @@ public class VisionTestOpMode extends LinearOpMode {
 
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
         OpenCvCamera cvCamera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        cvCamera.setPipeline(new OpenCvPipeline() {
-            @Override
-            public Mat processFrame(Mat input) {
-                return (Mat) visionTest.processFrame(input, -1);
-            }
-        });
         cvCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {

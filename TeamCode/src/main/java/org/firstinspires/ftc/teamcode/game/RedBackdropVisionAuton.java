@@ -145,7 +145,7 @@ public class RedBackdropVisionAuton extends LinearOpMode {
 
         arm.setArmPosition(Constants.Arm.ARM_DEPOSIT_POSITION);
 
-        location = TeamPropLocation.RIGHT;
+        location = TeamPropLocation.LEFT;
         telemetry.addData("Vision Location", location);
         telemetry.update();
 
