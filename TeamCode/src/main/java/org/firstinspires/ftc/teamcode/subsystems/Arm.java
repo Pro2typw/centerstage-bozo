@@ -20,10 +20,9 @@ public class Arm {
     public Arm(HardwareMap hardwareMap, Slides slides) {
         arm = hardwareMap.get(Servo.class, "arm");
         wrist = hardwareMap.get(Servo.class, "wrist");
+
         this.slides = slides;
-
 //        initToIntakeState = InitToIntake.START;
-
     }
 
     public void setArmPosition(double position) {

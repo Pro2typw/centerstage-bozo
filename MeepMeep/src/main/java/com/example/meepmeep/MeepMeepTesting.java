@@ -15,20 +15,29 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(0), 12.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(StartingPose)
-                                .lineToLinearHeading(new Pose2d(12, -35, Math.toRadians(180)))
+                                .addDisplacementMarker(() -> {
+//                                    arm.setState(Arm.ArmState.INTAKE);
+                                })
+                                .waitSeconds(2)
+                                .splineToSplineHeading(new Pose2d(36, -36, Math.toRadians(180)), Math.toRadians(90))
                                 .addDisplacementMarker(() -> {
                                     // Place pixel on the ground
+//                                    claw.setRightClawState(Claw.ClawState.OPEN);
                                 })
-                                .lineToLinearHeading(new Pose2d( 25, -35, Math.toRadians(180)))
+                                .waitSeconds(2)
                                 .addDisplacementMarker(() -> {
                                     // Extend slides
+//                                    arm.setState(Arm.ArmState.DEPOSIT);
+//                                    slides.setTargetPosition(1000, Constants.Slides.MAX_POWER - .1);
                                 })
-                                .lineToLinearHeading(new Pose2d(46, -35, Math.toRadians(0)))
+                                .waitSeconds(2)
+                                .lineToLinearHeading(new Pose2d(48, -35, Math.toRadians(0)))
                                 .addDisplacementMarker(() -> {
                                     // Place pixel on backdrop
+//                                    claw.setLeftClawState(Claw.ClawState.OPEN);
                                 })
                                 .strafeRight(5)
-                                .splineToLinearHeading(new Pose2d(59, -60), Math.toRadians(0))
+                                .splineToLinearHeading(new Pose2d(59, -56), Math.toRadians(0))
                                 .build()
                 );
 
