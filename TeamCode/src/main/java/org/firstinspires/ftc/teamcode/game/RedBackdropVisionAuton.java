@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 
-@Autonomous(name = "Red Backdrop", group = "LM2 Red Backdrop")
+@Autonomous(name = "Red Backdrop", group = "LM2")
 public class RedBackdropVisionAuton extends LinearOpMode {
 // DONE
     VisionPortal portal;
@@ -36,6 +36,7 @@ public class RedBackdropVisionAuton extends LinearOpMode {
         drive = new MecanumDrive(hardwareMap);
 
         final Pose2d startPose = new Pose2d(12, -72+11.2, Math.toRadians(90));
+        drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(12, -35, Math.toRadians(180)))
@@ -51,7 +52,7 @@ public class RedBackdropVisionAuton extends LinearOpMode {
                     // Place pixel on backdrop
                 })
                 .strafeRight(5)
-                .splineToLinearHeading(new Pose2d(59, -60), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(59, -56), Math.toRadians(0))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
@@ -95,8 +96,6 @@ public class RedBackdropVisionAuton extends LinearOpMode {
 //                .setCamera(BuiltinCameraDirection.FRONT)
 //                .addProcessor((VisionProcessor) redPropDetection) // TODO: convert to vision processor
 //                .build();
-
-        drive.setPoseEstimate(startPose);
 
         while(opModeInInit()) {
             location = redPropDetection.getPropPosition();

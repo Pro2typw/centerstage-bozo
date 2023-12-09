@@ -52,10 +52,10 @@ public class Teleop  extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()) {
             if(dtSlowMode) {
-                drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), -jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .3 * (Math.abs(x)/x)));
+                drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), -jpgamepad1.left_stick_y(), jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .3 * (Math.abs(x)/x)));
             }
             else {
-                drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), jpgamepad1.left_stick_y(), -jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .65 * (Math.abs(x)/x)));
+                drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), -jpgamepad1.left_stick_y(), jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .65 * (Math.abs(x)/x)));
             }
             // TODO: Get better multiplier Sahas; and change apply function?
 
@@ -63,7 +63,7 @@ public class Teleop  extends LinearOpMode {
             if (jpgamepad1.a())
                 drive.turnAsync(-Angle.normDelta(drive.getPoseEstimate().getHeading()));
 
-            if(jpgamepad2.a()) launcher.switchState(); // TODO: button config
+            if(jpgamepad1.a()) launcher.switchState(); // TODO: button config
 
             if(jpgamepad2.dpad_up()) slides.incrementStep(Slides.IncrementDirection.UP_MAJOR);
             if(jpgamepad2.dpad_down()) slides.incrementStep(Slides.IncrementDirection.DOWN_MAJOR);

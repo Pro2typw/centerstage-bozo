@@ -20,7 +20,7 @@ public class Launcher {
     public LaunchState LauncherState;
 
     public Launcher(@NonNull HardwareMap hardwareMap) {
-        servo = hardwareMap.get(CRServo.class, Constants.Launcher.LAUNCHER_MAP_NAME);
+        servo = hardwareMap.get(CRServo.class, "servo");
         LauncherState = LaunchState.STOP;
     }
     public void activateLauncher(LaunchState state){
