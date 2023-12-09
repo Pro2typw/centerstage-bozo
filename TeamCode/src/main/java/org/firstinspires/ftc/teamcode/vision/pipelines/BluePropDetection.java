@@ -38,8 +38,8 @@ public class BluePropDetection implements VisionProcessor {
             new Point(600, 400)
     );
 
-    private double tolerance = 60;
-    private final Scalar selectedValue = new Scalar(102, 127, 110);
+    private double tolerance = 30;
+    private final Scalar selectedValue = new Scalar(106, 144, 186);
     private double[] values = selectedValue.val;
     private Scalar lower = new Scalar(values[0] - tolerance < 0? 0: values[0] - tolerance,values[1] - tolerance < 0? 0: values[1] - tolerance, values[2] - tolerance < 0? 0: values[2] - tolerance);
     private Scalar upper = new Scalar(values[0] + tolerance > 255? 255: values[0] + tolerance,values[1] + tolerance > 255? 255: values[1] + tolerance, values[2] + tolerance > 255? 255: values[2] + tolerance);

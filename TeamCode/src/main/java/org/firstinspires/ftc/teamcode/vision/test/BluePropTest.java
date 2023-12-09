@@ -14,7 +14,7 @@ import java.util.List;
 
 public class BluePropTest extends OpenCvPipeline {
     public int tolerance = 30;
-    private final Scalar selectedValue = new Scalar(103, 103, 168); // rgb(103, 103, 168)
+    private final Scalar selectedValue = new Scalar(106, 144, 186); // rgb(103, 103, 168)
     private double[] values = selectedValue.val;
     private Scalar lower = new Scalar(values[0] - tolerance < 0? 0: values[0] - tolerance,values[1] - tolerance < 0? 0: values[1] - tolerance, values[2] - tolerance < 0? 0: values[2] - tolerance);
     private Scalar upper = new Scalar(values[0] + tolerance > 255? 255: values[0] + tolerance,values[1] + tolerance > 255? 255: values[1] + tolerance, values[2] + tolerance > 255? 255: values[2] + tolerance);

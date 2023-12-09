@@ -14,7 +14,7 @@ import java.util.List;
 
 public class RedPropTest extends OpenCvPipeline {
     public int tolerance = 30;
-    private final Scalar selectedValue = new Scalar(124, 100, 52); // hsl(124, 100%, 52%)
+    private final Scalar selectedValue = new Scalar(5, 185, 128); // hsl(124, 100%, 52%)
     private double[] values = selectedValue.val;
     private Scalar lower = new Scalar(values[0] - tolerance < 0? 0: values[0] - tolerance,values[1] - tolerance < 0? 0: values[1] - tolerance, values[2] - tolerance < 0? 0: values[2] - tolerance);
     private Scalar upper = new Scalar(values[0] + tolerance > 255? 255: values[0] + tolerance,values[1] + tolerance > 255? 255: values[1] + tolerance, values[2] + tolerance > 255? 255: values[2] + tolerance);
