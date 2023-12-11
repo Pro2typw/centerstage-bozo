@@ -55,7 +55,7 @@ public class Teleop  extends LinearOpMode {
                 drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), -jpgamepad1.left_stick_y(), jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .3 * (Math.abs(x)/x)));
             }
             else {
-                drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), -jpgamepad1.left_stick_y(), jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .65 * (Math.abs(x)/x)));
+                drive.setPowersByGamepadRobotCentric(jpgamepad1.left_stick_x(), -jpgamepad1.left_stick_y(), jpgamepad1.right_stick_x(), x -> (Math.pow(x, power) * .75 * (Math.abs(x)/x)));
             }
             // TODO: Get better multiplier Sahas; and change apply function?
 

@@ -21,16 +21,21 @@ import org.firstinspires.ftc.teamcode.subsystems.util.Constants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.TelemetryUtil;
 import org.firstinspires.ftc.teamcode.vision.pipelines.BluePropDetection;
+import org.firstinspires.ftc.teamcode.vision.pipelines.OpencvBluePropDetect;
+import org.firstinspires.ftc.teamcode.vision.pipelines.OpencvRedPropDetect;
 import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(group = "LM2", name = "Blue Backdrop")
 public class BlueBackdropVisionAuton extends LinearOpMode {
     // DONE
 
     VisionPortal portal;
-    BluePropDetection bluePropDetection;
+    OpencvBluePropDetect bluePropDetection;
     WebcamName webcamName;
     TeamPropLocation location;
     MecanumDrive drive;
@@ -48,7 +53,7 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
 
         Arm arm = new Arm(hardwareMap, slides);
 
-        final Pose2d startPose = new Pose2d(12, 72-11.2, Math.toRadians(270));
+        final Pose2d startPose = new Pose2d(12+5, 72-11.2, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
@@ -138,16 +143,27 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(59, 56), Math.toRadians(0))
                 .build();
 
-        bluePropDetection = new BluePropDetection();
+        bluePropDetection = new OpencvBluePropDetect();
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().
+                getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        OpenCvCamera cvCamera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        cvCamera.setPipeline(bluePropDetection);
+        cvCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                cvCamera.startStreaming(960, 720, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+            }
+        });
 
 
 
-//        portal = new VisionPortal.Builder()
-//                .setCamera(webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"))
-//                .setCameraResolution(new Size(640, 480))  // you can go up to 720 x 960
-//                .setCamera(BuiltinCameraDirection.FRONT)
-//                .addProcessor((VisionProcessor) bluePropDetection) // TODO: convert to vision processor
-//                .build();
 
         while(opModeInInit()) {
             location = bluePropDetection.getPropPosition();
@@ -174,10 +190,16 @@ public class BlueBackdropVisionAuton extends LinearOpMode {
                 drive.followTrajectorySequenceAsync(right);
         }
 
+
         while (opModeIsActive()) {
             drive.update();
             telemetry.addData("pose estimate", drive.getPoseEstimate());
             telemetry.update();
+
+            if(!drive.isBusy() && getRuntime() > 10) {
+                slides.setPositionToBottom();
+                arm.setState(Arm.ArmState.INTAKE);
+            }
         }
 
     }

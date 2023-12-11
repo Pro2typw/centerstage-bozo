@@ -19,16 +19,20 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.subsystems.util.Constants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.vision.pipelines.OpencvRedPropDetect;
 import org.firstinspires.ftc.teamcode.vision.pipelines.RedPropDetection;
 import org.firstinspires.ftc.teamcode.vision.util.TeamPropLocation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(name = "Red Backdrop", group = "LM2")
 public class RedBackdropVisionAuton extends LinearOpMode {
 // DONE
     VisionPortal portal;
-    RedPropDetection redPropDetection;
+    OpencvRedPropDetect redPropDetection;
     WebcamName webcamName;
     TeamPropLocation location;
 
@@ -45,7 +49,7 @@ public class RedBackdropVisionAuton extends LinearOpMode {
 
         Arm arm = new Arm(hardwareMap, slides);
 
-        final Pose2d startPose = new Pose2d(12, -72+11.2, Math.toRadians(90));
+        final Pose2d startPose = new Pose2d(12+5, -72+11.2, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
@@ -53,6 +57,7 @@ public class RedBackdropVisionAuton extends LinearOpMode {
                     arm.setState(Arm.ArmState.INTAKE);
                 })
                 .waitSeconds(2)
+                .strafeLeft(5)
                 .lineToLinearHeading(new Pose2d(14, -35, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
@@ -72,6 +77,10 @@ public class RedBackdropVisionAuton extends LinearOpMode {
                 })
                 .strafeRight(5)
                 .splineToLinearHeading(new Pose2d(59, -56), Math.toRadians(0))
+                .addDisplacementMarker(() -> {
+                    slides.setPositionToBottom();
+                    arm.setState(Arm.ArmState.INTAKE);
+                })
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
@@ -79,6 +88,7 @@ public class RedBackdropVisionAuton extends LinearOpMode {
                     arm.setState(Arm.ArmState.INTAKE);
                 })
                 .waitSeconds(2)
+                .strafeLeft(5)
                 .lineTo(new Vector2d(12, -35))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
@@ -98,6 +108,10 @@ public class RedBackdropVisionAuton extends LinearOpMode {
                 })
                 .strafeRight(5)
                 .splineToLinearHeading(new Pose2d(59, -56), Math.toRadians(0))
+                .addDisplacementMarker(() -> {
+                    slides.setPositionToBottom();
+                    arm.setState(Arm.ArmState.INTAKE);
+                })
                 .build();
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
@@ -105,7 +119,8 @@ public class RedBackdropVisionAuton extends LinearOpMode {
                     arm.setState(Arm.ArmState.INTAKE);
                 })
                 .waitSeconds(2)
-                .splineToSplineHeading(new Pose2d(44, -36, Math.toRadians(180)), Math.toRadians(90))
+//                .strafeLeft(5)
+                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(180)), Math.toRadians(90))
                 .addDisplacementMarker(() -> {
                     // Place pixel on the ground
                     claw.setRightClawState(Claw.ClawState.OPEN);
@@ -117,23 +132,37 @@ public class RedBackdropVisionAuton extends LinearOpMode {
                     slides.setTargetPosition(1000, Constants.Slides.MAX_POWER - .1);
                 })
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(50, -40, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(52, -40, Math.toRadians(0)))
                 .addDisplacementMarker(() -> {
                     // Place pixel on backdrop
                     claw.setLeftClawState(Claw.ClawState.OPEN);
                 })
                 .strafeRight(5)
                 .splineToLinearHeading(new Pose2d(59, -56), Math.toRadians(0))
+                .addDisplacementMarker(() -> {
+                    slides.setPositionToBottom();
+                    arm.setState(Arm.ArmState.INTAKE);
+                })
                 .build();
 
-        redPropDetection = new RedPropDetection();
+        redPropDetection = new OpencvRedPropDetect();
 
-//        portal = new VisionPortal.Builder()
-//                .setCamera(webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"))
-//                .setCameraResolution(new Size(640, 480))  // you can go up to 720 x 960
-//                .setCamera(BuiltinCameraDirection.FRONT)
-//                .addProcessor((VisionProcessor) redPropDetection) // TODO: convert to vision processor
-//                .build();
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().
+                getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        OpenCvCamera cvCamera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        cvCamera.setPipeline(redPropDetection);
+        cvCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                cvCamera.startStreaming(960, 720, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+            }
+        });
 
         while(opModeInInit()) {
             location = redPropDetection.getPropPosition();
@@ -145,9 +174,6 @@ public class RedBackdropVisionAuton extends LinearOpMode {
 
         arm.setArmPosition(Constants.Arm.ARM_DEPOSIT_POSITION);
 
-        location = TeamPropLocation.LEFT;
-        telemetry.addData("Vision Location", location);
-        telemetry.update();
 
         switch (location) {
             case LEFT:
@@ -160,8 +186,14 @@ public class RedBackdropVisionAuton extends LinearOpMode {
                 drive.followTrajectorySequence(right);
         }
 
+
+
         while (opModeIsActive()) {
             drive.update();
+            if(!drive.isBusy() && getRuntime() > 10) {
+                slides.setPositionToBottom();
+                arm.setState(Arm.ArmState.INTAKE);
+            }
         }
 
     }

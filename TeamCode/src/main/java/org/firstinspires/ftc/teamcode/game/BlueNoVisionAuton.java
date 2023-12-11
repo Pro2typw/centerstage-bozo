@@ -1,14 +1,20 @@
 package org.firstinspires.ftc.teamcode.game;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
-@Autonomous(name = "Blue No Vision Auton", group = "LM1 Game")
+@Autonomous(name = "Blue Stack", group = "LM2 Game")
 public class BlueNoVisionAuton extends LinearOpMode {
 
     private enum States {
@@ -26,41 +32,18 @@ public class BlueNoVisionAuton extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
 
-        DcMotorEx leftFront, leftRear, rightRear, rightFront;
-        leftFront = hardwareMap.get(DcMotorEx.class, "flMec");
-//        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear = hardwareMap.get(DcMotorEx.class, "blMec");
-//        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightRear = hardwareMap.get(DcMotorEx.class, "brMec");
-        rightFront = hardwareMap.get(DcMotorEx.class, "frMec");
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        CRServo launch = hardwareMap.get(CRServo.class, "servo");
+        MecanumDrive drive = new MecanumDrive(hardwareMap);
+        Slides slides = new Slides(hardwareMap);
+        Claw claw = new Claw(hardwareMap);
 
-        double initPeriod = 0;
+        claw.setLeftClawState(Claw.ClawState.CLOSE);
+        claw.setRightClawState(Claw.ClawState.CLOSE);
 
-        while(opModeInInit()) {
-            initPeriod = getRuntime();
-        }
+        Arm arm = new Arm(hardwareMap, slides);
         waitForStart();
-        while(opModeIsActive()) {
-            if(getRuntime() - initPeriod < 2.2) {
-                leftFront.setPower(.7);
-                leftRear.setPower(-.7);
-                rightRear.setPower(.7);
-                rightFront.setPower(-.7);
-            }
-            else {
-                leftFront.setPower(0);
-                leftRear.setPower(0);
-                rightRear.setPower(0);
-                rightFront.setPower(0);
-            }
-
-        }
+        arm.setState(Arm.ArmState.INTAKE);
 
     }
 }

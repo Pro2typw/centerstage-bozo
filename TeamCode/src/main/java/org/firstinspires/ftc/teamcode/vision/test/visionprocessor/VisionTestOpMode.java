@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.vision.pipelines.OpencvBluePropDetect;
+import org.firstinspires.ftc.teamcode.vision.pipelines.OpencvRedPropDetect;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -17,13 +19,13 @@ import org.openftc.easyopencv.OpenCvPipeline;
 @TeleOp(name = "Vision Test Op Mode", group = "VISION TEST")
 public class VisionTestOpMode extends LinearOpMode {
 
-    private VisionPortal portal;
-    private VisionTest visionTest;
+
+    private OpencvBluePropDetect visionTest;
     WebcamName webcamName;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        visionTest = new VisionTest();
+        visionTest = new OpencvBluePropDetect();
 //        portal = new VisionPortal.Builder()
 //                .setCamera(webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"))
 //                .setCameraResolution(new Size(960, 720))  // you can go up to 720 x 960
@@ -36,6 +38,7 @@ public class VisionTestOpMode extends LinearOpMode {
 
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
         OpenCvCamera cvCamera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        cvCamera.setPipeline(visionTest);
         cvCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -60,7 +63,7 @@ public class VisionTestOpMode extends LinearOpMode {
             telemetry.addData("Pipeline Time (ms)", cvCamera.getPipelineTimeMs());
             telemetry.addData("Overhead Time (ms)", cvCamera.getOverheadTimeMs());
             telemetry.addData("Total Frame Time (ms)", cvCamera.getTotalFrameTimeMs());
-            telemetry.addData("Prop Position", visionTest.getPropPosition());
+//            telemetry.addData("Prop Position", visionTest.getPropPosition());
             telemetry.update();
         }
     }
